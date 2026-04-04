@@ -54,6 +54,9 @@ export class Player implements OnInit {
       this.character.set(character);
       this.faction.set(getFaction(character.race));
       this.categoryTree.set(this.buildCategoryTree(categories));
+
+      // Auto-navigate to "General" (ID 92) like the original
+      this.selectCategory(92);
     });
   }
 
@@ -78,14 +81,23 @@ export class Player implements OnInit {
     }));
   }
 
-  toggleParent(parentId: number): void {
+  toggleParent(parent: CategoryNode): void {
+    // If the parent has no children, navigate directly (e.g., "General", "Feats of Strength")
+    if (parent.children.length === 0) {
+      this.selectCategory(parent.id);
+      // Collapse any expanded parent
+      this.expandedParents.set(new Set());
+      return;
+    }
+
+    // Otherwise, expand/collapse the parent
     this.expandedParents.update((set) => {
       const next = new Set(set);
-      if (next.has(parentId)) {
-        next.delete(parentId);
+      if (next.has(parent.id)) {
+        next.delete(parent.id);
       } else {
         next.clear();
-        next.add(parentId);
+        next.add(parent.id);
       }
       return next;
     });

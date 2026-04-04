@@ -70,8 +70,8 @@
     <div class="mb-1">
       <button
         class="category w-full text-left"
-        [class.selected]="isParentExpanded(parent.id)"
-        (click)="toggleParent(parent.id)"
+        [class.selected]="isParentExpanded(parent.id) || currentCategoryId() === parent.id"
+        (click)="toggleParent(parent)"
         [attr.aria-expanded]="isParentExpanded(parent.id)"
         [attr.aria-controls]="'children-' + parent.id"
       >
