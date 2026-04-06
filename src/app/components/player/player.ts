@@ -90,10 +90,11 @@ export class Player implements OnInit {
       return;
     }
 
-    // Otherwise, expand/collapse the parent
+    // Otherwise, expand/collapse the parent and navigate to its achievements
+    const isExpanded = this.expandedParents().has(parent.id);
     this.expandedParents.update((set) => {
       const next = new Set(set);
-      if (next.has(parent.id)) {
+      if (isExpanded) {
         next.delete(parent.id);
       } else {
         next.clear();
@@ -101,6 +102,10 @@ export class Player implements OnInit {
       }
       return next;
     });
+
+    if (!isExpanded) {
+      this.selectCategory(parent.id);
+    }
   }
 
   isParentExpanded(parentId: number): boolean {
@@ -108,15 +113,20 @@ export class Player implements OnInit {
   }
 
   toggleStatistic(catId: number): void {
+    const isExpanded = this.expandedStatistics().has(catId);
     this.expandedStatistics.update((set) => {
       const next = new Set(set);
-      if (next.has(catId)) {
+      if (isExpanded) {
         next.delete(catId);
       } else {
         next.add(catId);
       }
       return next;
     });
+
+    if (!isExpanded) {
+      this.selectCategory(catId);
+    }
   }
 
   isStatisticExpanded(catId: number): boolean {

@@ -3,16 +3,18 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Achievement, AchievementCategory, AchievementProgress, CharacterAchievement } from '../models/achievement';
-import { Character, CharacterRank } from '../models/character';
+import { Character, CharacterRank, PaginatedResponse } from '../models/character';
 
 @Injectable({ providedIn: 'root' })
 export class PveApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl + 'characters/';
 
-  /** Get all characters ranked by achievement points */
-  getCharacterAchievements(): Observable<CharacterRank[]> {
-    return this.http.get<CharacterRank[]>(`${this.baseUrl}character_achievement`);
+  /** Get characters ranked by achievement points (paginated) */
+  getCharacterAchievements(page = 1, limit = 25): Observable<PaginatedResponse<CharacterRank>> {
+    return this.http.get<PaginatedResponse<CharacterRank>>(
+      `${this.baseUrl}character_achievement?page=${page}&limit=${limit}`
+    );
   }
 
   /** Get a single character by ID */

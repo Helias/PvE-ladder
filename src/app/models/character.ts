@@ -11,6 +11,13 @@ export interface CharacterRank {
   faction: Faction;
 }
 
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export interface Character {
   guid: number;
   name: string;

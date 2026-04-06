@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -13,6 +14,8 @@ import { Achievement } from '../../models/achievement';
 import { Faction } from '../../models/character';
 import { PveApiService } from '../../services/pve-api.service';
 
+type AchievementFilter = 'all' | 'complete' | 'incomplete';
+
 interface AchievementView extends Achievement {
   completed: boolean;
   completedDate: Date | null;
@@ -24,7 +27,20 @@ interface AchievementView extends Achievement {
   imports: [],
   template: `
     <div class="achievement-container mx-auto">
-      @for (ach of achievements(); track ach.ID) {
+      <fieldset class="filter-bar" role="radiogroup" aria-label="Filter achievements">
+        @for (option of filterOptions; track option.value) {
+          <button
+            class="filter-btn"
+            [class.active]="filter() === option.value"
+            [attr.aria-pressed]="filter() === option.value"
+            (click)="filter.set(option.value)"
+          >
+            {{ option.label }}
+          </button>
+        }
+      </fieldset>
+
+      @for (ach of filteredAchievements(); track ach.ID) {
         <a
           [href]="'https://wowgaming.altervista.org/aowow/?achievement=' + ach.ID"
           target="_blank"
@@ -62,6 +78,21 @@ export class Achievements implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly achievements = signal<AchievementView[]>([]);
+  readonly filter = signal<AchievementFilter>('all');
+
+  readonly filterOptions: { value: AchievementFilter; label: string }[] = [
+    { value: 'all', label: 'All' },
+    { value: 'complete', label: 'Complete' },
+    { value: 'incomplete', label: 'Incomplete' },
+  ];
+
+  readonly filteredAchievements = computed(() => {
+    const achs = this.achievements();
+    const f = this.filter();
+    if (f === 'complete') return achs.filter((a) => a.completed);
+    if (f === 'incomplete') return achs.filter((a) => !a.completed);
+    return achs;
+  });
 
   ngOnInit(): void {
     const characterId = Number(this.route.parent?.snapshot.paramMap.get('id'));
