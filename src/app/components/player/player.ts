@@ -104,7 +104,7 @@ export class Player implements OnInit {
     });
 
     if (!isExpanded) {
-      this.selectCategory(parent.id);
+      this.selectCategory(parent.id, false);
     }
   }
 
@@ -125,7 +125,7 @@ export class Player implements OnInit {
     });
 
     if (!isExpanded) {
-      this.selectCategory(catId);
+      this.selectCategory(catId, false);
     }
   }
 
@@ -133,9 +133,11 @@ export class Player implements OnInit {
     return this.expandedStatistics().has(catId);
   }
 
-  selectCategory(catId: number): void {
+  selectCategory(catId: number, closeSidebar = true): void {
     this.currentCategoryId.set(catId);
-    this.sidebarOpen.set(false);
+    if (closeSidebar) {
+      this.sidebarOpen.set(false);
+    }
 
     const characterId = this.character()?.guid;
     if (!characterId) return;
