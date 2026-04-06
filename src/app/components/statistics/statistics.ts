@@ -9,8 +9,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin, switchMap } from 'rxjs';
 import { Achievement, AchievementCategory } from '../../models/achievement';
 import { PveApiService } from '../../services/pve-api.service';
@@ -124,9 +124,9 @@ export class Statistics implements OnInit {
     const copperRem = copper % 100;
 
     const html =
-      `${gold} <img src="/img/money/gold.png" alt="gold" width="16" height="16" class="inline-block align-middle"> ` +
-      `${silver} <img src="/img/money/silver.png" alt="silver" width="16" height="16" class="inline-block align-middle"> ` +
-      `${copperRem} <img src="/img/money/copper.png" alt="copper" width="16" height="16" class="inline-block align-middle">`;
+      `${gold} <img src="img/money/gold.png" alt="gold" width="16" height="16" class="inline-block align-middle"> ` +
+      `${silver} <img src="img/money/silver.png" alt="silver" width="16" height="16" class="inline-block align-middle"> ` +
+      `${copperRem} <img src="img/money/copper.png" alt="copper" width="16" height="16" class="inline-block align-middle">`;
 
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
