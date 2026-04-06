@@ -1,0 +1,21 @@
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-name {
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0;
+}
+
+.player-level {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.player-guild {
+  color: #66bb6a;
+  font-size: 14px;
+}

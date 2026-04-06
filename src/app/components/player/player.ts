@@ -3,14 +3,16 @@ import {
   Component,
   computed,
   inject,
+  OnDestroy,
   OnInit,
   signal,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { Character, Faction, getFaction } from '../../models/character';
+import { getFaction } from '../../models/character';
 import { AchievementCategory, STATS_CATEGORY_IDS } from '../../models/achievement';
 import { PveApiService } from '../../services/pve-api.service';
+import { PlayerContextService } from '../../services/player-context.service';
 import { CategoryNav, CategoryNode } from './category-nav/category-nav';
 
 @Component({
@@ -20,13 +22,14 @@ import { CategoryNav, CategoryNode } from './category-nav/category-nav';
   templateUrl: './player.html',
   styleUrl: './player.css',
 })
-export class Player implements OnInit {
+export class Player implements OnInit, OnDestroy {
   private readonly api = inject(PveApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly playerContext = inject(PlayerContextService);
 
-  readonly character = signal<Character | null>(null);
-  readonly faction = signal<Faction>('alliance');
+  readonly character = this.playerContext.character;
+  readonly faction = this.playerContext.faction;
   readonly categoryTree = signal<CategoryNode[]>([]);
   readonly currentCategoryId = signal<number | null>(null);
   readonly sidebarOpen = signal(false);
@@ -89,6 +92,11 @@ export class Player implements OnInit {
     } else {
       this.router.navigate(['ach', catId], { relativeTo: this.route });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.playerContext.character.set(null);
+    this.playerContext.faction.set('alliance');
   }
 
   toggleSidebar(): void {

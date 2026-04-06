@@ -42,32 +42,6 @@
 
   <!-- Main content -->
   <div class="min-w-0 flex-1">
-    @if (character(); as char) {
-      <div class="mb-6 flex items-center gap-4 rounded-lg bg-wow-dark-brown p-4">
-        <img
-          [src]="'/img/race/64/' + char.race + '-' + char.gender + '.png'"
-          [alt]="'Race ' + char.race"
-          width="64"
-          height="64"
-          class="rounded"
-        />
-        <img
-          [src]="'/img/class/64/' + char.class + '.png'"
-          [alt]="'Class ' + char.class"
-          width="64"
-          height="64"
-          class="rounded"
-        />
-        <div>
-          <h2 class="text-2xl font-bold" [class]="faction()">{{ char.name }}</h2>
-          <p class="text-gray-400">Level {{ char.level }}</p>
-          @if (char.guildName) {
-            <p class="text-wow-guild">&lt;{{ char.guildName }}&gt;</p>
-          }
-        </div>
-      </div>
-    }
-
     <router-outlet />
   </div>
 </div>

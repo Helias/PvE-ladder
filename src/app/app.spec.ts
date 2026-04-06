@@ -16,10 +16,15 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render title on home page', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Players Stats');
+  });
+
+  it('should default isPlayerPage to false', () => {
+    const fixture = TestBed.createComponent(App);
+    expect(fixture.componentInstance.isPlayerPage()).toBe(false);
   });
 });
