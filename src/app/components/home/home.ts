@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
@@ -26,6 +27,7 @@ export class Home implements OnInit {
   private readonly api = inject(PveApiService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly pageSize = 10;
   private readonly searchSubject = new Subject<string>();
@@ -92,6 +94,7 @@ export class Home implements OnInit {
     this.ranks.set(ranked);
     this.currentPage.set(res.page);
     this.totalItems.set(res.total);
+    this.cdr.markForCheck();
   }
 
   showPlayerStats(guid: number): void {
